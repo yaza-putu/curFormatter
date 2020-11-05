@@ -1,7 +1,12 @@
 var curFormatter = function(){
 
     this.formatRupiah = function(value, prefix){
-        let new_number = value.replace(/[^,\d]/g, '').toString(),
+        let new_number;
+        if(typeof value == 'number'){
+            new_number = value.toString();
+        }else{
+            new_number = value.replace(/[^,\d]/g, '').toString();
+        }       
         split = new_number.split(','),
         remains = split[0].length % 3,
         rupiah = split[0].substr(0, remains),
@@ -21,38 +26,38 @@ var curFormatter = function(){
         return new_number; /*NB: don't reformat this value if decimal number*/
     }
 
-    this.inputOri = function(ele_ori, value){
+    this.unformatInput = function(attrOutput, value){
         let parent = this;
-        if(typeof ele_ori == "object")
+        if(typeof attrOutput == "object")
         {
-            ele_ori.value = parent.unformatRupiah(value);
+            attrOutput.value = parent.unformatRupiah(value);
         }
-        if(typeof ele_ori == "string")
+        if(typeof attrOutput == "string")
         {
-            let inputs = document.querySelectorAll(ele_ori);
+            let inputs = document.querySelectorAll(attrOutput);
             [].forEach.call(inputs,function(input){
-                parent.inputOri(input, value);
+                parent.unformatInput(input, value);
             });
         }
     }
 
-    this.input = function(ele, prefix, ele_ori){
+    this.formatInput = function(attrInput, prefix, attrOutput ){
         let parent = this;
-        if(typeof ele == "object")
+        if(typeof attrInput == "object")
         {
-            ele.value = parent.formatRupiah(ele.value, prefix);
-            parent.inputOri(ele_ori, ele.value);
+            attrInput.value = parent.formatRupiah(attrInput.value, prefix);
+            parent.unformatInput(attrOutput, attrInput.value);
 
-            ele.addEventListener('keyup',function(){
-                ele.value = parent.formatRupiah(ele.value, prefix);
-                parent.inputOri(ele_ori, ele.value);
+            attrInput.addEventListener('keyup',function(){
+                attrInput.value = parent.formatRupiah(attrInput.value, prefix);
+                parent.unformatInput(attrOutput, attrInput.value);
             });
         }
-        if(typeof ele == "string")
+        if(typeof attrInput == "string")
         {
-            let inputs = document.querySelectorAll(ele);
+            let inputs = document.querySelectorAll(attrInput);
             [].forEach.call(inputs,function(input){
-                parent.input(input, prefix, ele_ori);
+                parent.formatInput(input, prefix, attrOutput);
             });
         }
     }
