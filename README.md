@@ -8,9 +8,12 @@ Javascript formatter Rupiah currency
 - Unformat input (form input to format number)
 
 ## How To Use
-- Format number to rupiah
+- First initialize
 ```javascript
 var formater = new curFormatter();
+```
+- Format number to rupiah
+```javascript
 formater.formatRupiah(120000,'Rp');
 ```
 - Format Rupiah to number
